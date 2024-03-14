@@ -1,5 +1,7 @@
 resource "aws_secretsmanager_secret" "secret" {
   name = "lambda_sign_key"
+
+  recovery_window_in_days = 0 # means no recovery window
 }
 
 resource "random_password" "random_string" {
