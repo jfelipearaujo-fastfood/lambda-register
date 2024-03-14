@@ -6,8 +6,6 @@ module "database" {
 
 module "secret" {
   source = "./modules/secret"
-
-  lambda_name = "register"
 }
 
 module "register" {

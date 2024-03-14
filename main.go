@@ -43,9 +43,10 @@ type Request struct {
 }
 
 type User struct {
-	Id         string `json:"Id"`
-	DocumentId string `json:"DocumentId"`
-	Password   string `json:"Password"`
+	Id          string `json:"Id"`
+	DocumentId  string `json:"DocumentId"`
+	Password    string `json:"Password"`
+	IsAnonymous bool   `json:"IsAnonymous"`
 }
 
 func checkIfCPFIsInUse(cpf string) (bool, error) {
@@ -91,10 +92,32 @@ func persistUser(user User) error {
 		return err
 	}
 
-	res, err := conn.Exec("INSERT INTO clients (Id, DocumentId, Password) VALUES ($1, $2, $3);", user.Id, user.DocumentId, user.Password)
-	if err != nil {
-		slog.Error("error while trying to execute the query", "error", err)
-		return err
+	var res sql.Result
+
+	if user.IsAnonymous {
+		slog.Debug("inserting an anonymous user")
+		res, err = conn.Exec("INSERT INTO clients (Id, DocumentType, IsAnonymous) VALUES ($1, $2, $3);",
+			user.Id,
+			"CPF",
+			false)
+
+		if err != nil {
+			slog.Error("error while trying to execute the query", "error", err)
+			return err
+		}
+	} else {
+		slog.Debug("inserting an user")
+		res, err = conn.Exec("INSERT INTO clients (Id, DocumentId, DocumentType, IsAnonymous, Password) VALUES ($1, $2, $3, $4, $5);",
+			user.Id,
+			user.DocumentId,
+			"CPF",
+			false,
+			user.Password)
+
+		if err != nil {
+			slog.Error("error while trying to execute the query", "error", err)
+			return err
+		}
 	}
 
 	affectedRows, err := res.RowsAffected()
@@ -122,6 +145,10 @@ func createJwtToken(user User) (string, error) {
 	return token.SignedString(signingKey)
 }
 
+func maskCpf(cpf string) string {
+	return strings.ReplaceAll(cpf, cpf[3:(len(cpf)-2)], strings.Repeat("*", len(cpf)-5))
+}
+
 func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var request Request
 
@@ -136,60 +163,71 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 		}, nil
 	}
 
-	cpf := cpf.NewCPF(request.CPF)
+	var user User
 
-	slog.Debug("validating the cpf")
-	if !cpf.IsValid() {
-		slog.Error("invalid cpf", "cpf", request.CPF)
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
-			Body:       "Invalid CPF or Password",
-		}, nil
-	}
+	// If the request is not empty, we need to validate the CPF and the Password
+	if request.CPF == "" || request.Password == "" {
+		cpf := cpf.NewCPF(request.CPF)
 
-	slog.Debug("validating the password")
-	if len(request.Password) < 8 {
-		slog.Error("invalid password", "password_length", len(request.Password))
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
-			Body:       "Invalid CPF or Password",
-		}, nil
-	}
+		slog.Debug("validating the cpf")
+		if !cpf.IsValid() {
+			slog.Error("invalid cpf", "cpf", request.CPF)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusBadRequest,
+				Body:       "Invalid CPF or Password",
+			}, nil
+		}
 
-	slog.Debug("checking if the cpf is in use")
-	cpfInUse, err := checkIfCPFIsInUse(request.CPF)
-	if err != nil {
-		slog.Error("error while trying to check if the cpf is in use", "error", err)
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Body:       http.StatusText(http.StatusInternalServerError),
-		}, nil
-	}
+		slog.Debug("validating the password")
+		if len(request.Password) < 8 {
+			slog.Error("invalid password", "password_length", len(request.Password))
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusBadRequest,
+				Body:       "Invalid CPF or Password",
+			}, nil
+		}
 
-	slog.Debug("checking if the cpf is in use", "cpf_in_use", cpfInUse)
-	if cpfInUse {
-		hidden := strings.ReplaceAll(request.CPF, request.CPF[3:(len(request.CPF)-2)], strings.Repeat("*", len(request.CPF)-5))
-		slog.Error("cpf already in use", "cpf", hidden)
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusConflict,
-			Body:       "Invalid CPF or Password",
-		}, nil
-	}
+		slog.Debug("checking if the cpf is in use")
+		cpfInUse, err := checkIfCPFIsInUse(request.CPF)
+		if err != nil {
+			slog.Error("error while trying to check if the cpf is in use", "error", err)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+				Body:       http.StatusText(http.StatusInternalServerError),
+			}, nil
+		}
 
-	slog.Debug("hashing the password")
-	hashedPassword, err := hashPassword(request.Password)
-	if err != nil {
-		slog.Error("error while trying to hash the password", "error", err)
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Body:       http.StatusText(http.StatusInternalServerError),
-		}, nil
-	}
+		slog.Debug("checking if the cpf is in use", "cpf_in_use", cpfInUse)
+		if cpfInUse {
+			slog.Error("cpf already in use", "cpf", maskCpf(request.CPF))
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusConflict,
+				Body:       "Invalid CPF or Password",
+			}, nil
+		}
 
-	user := User{
-		Id:         uuid.NewString(),
-		DocumentId: request.CPF,
-		Password:   hashedPassword,
+		slog.Debug("hashing the password")
+		hashedPassword, err := hashPassword(request.Password)
+		if err != nil {
+			slog.Error("error while trying to hash the password", "error", err)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+				Body:       http.StatusText(http.StatusInternalServerError),
+			}, nil
+		}
+
+		user = User{
+			Id:          uuid.NewString(),
+			DocumentId:  request.CPF,
+			Password:    hashedPassword,
+			IsAnonymous: false,
+		}
+	} else {
+		// If the request is empty, we need to create an anonymous user
+		user = User{
+			Id:          uuid.NewString(),
+			IsAnonymous: true,
+		}
 	}
 
 	slog.Debug("persisting the user")

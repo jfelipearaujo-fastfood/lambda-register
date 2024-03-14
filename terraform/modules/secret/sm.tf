@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "secret" {
-  name = "lambda_${var.lambda_name}_sign_key"
+  name = "lambda_sign_key"
 }
 
 resource "random_password" "random_string" {
