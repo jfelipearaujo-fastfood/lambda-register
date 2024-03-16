@@ -9,11 +9,6 @@ variable "sign_key" {
   description = "The sign key for the lambda function"
 }
 
-variable "db_host" {
-  type        = string
-  description = "The hostname of the database"
-}
-
 variable "db_port" {
   type        = number
   description = "The port of the database"
@@ -28,11 +23,6 @@ variable "db_name" {
 variable "db_username" {
   type        = string
   description = "The username for the database"
-}
-
-variable "db_password" {
-  type        = string
-  description = "The password for the database"
 }
 
 variable "security_group_id" {

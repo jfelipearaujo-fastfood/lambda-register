@@ -47,10 +47,6 @@ destroy:
 	@cd terraform \
 		&& terraform destroy -auto-approve
 
-gen-cloud-diagrams:
-	cd docs/diagrams && \
-	python3 cloud_aws_database_migrations.py
-
 gen-tf-docs:
 	@echo "Generating Terraform Docs..."
 	@terraform-docs markdown table terraform

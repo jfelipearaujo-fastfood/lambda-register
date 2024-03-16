@@ -11,9 +11,7 @@ No requirements.
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_lambda_name"></a> [lambda\_name](#input\_lambda\_name) | The name of the lambda function | `string` | n/a | yes |
+No inputs.
 ## Modules
 
 No modules.
