@@ -64,7 +64,7 @@ func checkIfCPFIsInUse(cpf string) (bool, error) {
 
 	statement, err := conn.Query("SELECT COUNT(*) As count FROM clients WHERE DocumentId = $1", cpf)
 	if err != nil {
-		slog.Error("error while trying to execute the query", "error", err)
+		slog.Error("error while trying to execute the query to check if CPF is in use", "error", err)
 		return false, err
 	}
 
@@ -102,7 +102,7 @@ func persistUser(user User) error {
 			false)
 
 		if err != nil {
-			slog.Error("error while trying to execute the query", "error", err)
+			slog.Error("error while trying to execute the query to insert an anonymous user", "error", err)
 			return err
 		}
 	} else {
@@ -115,7 +115,7 @@ func persistUser(user User) error {
 			user.Password)
 
 		if err != nil {
-			slog.Error("error while trying to execute the query", "error", err)
+			slog.Error("error while trying to execute the query to insert an user", "error", err)
 			return err
 		}
 	}
@@ -259,6 +259,8 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	slog.Info("received a request", "path", req.Path, "method", req.HTTPMethod)
+
+	slog.Info("headers", "headers", req.Headers)
 
 	if req.Path == "/users" && req.HTTPMethod == "POST" {
 		return handleCreateUser(req)
