@@ -49,6 +49,18 @@ type User struct {
 	IsAnonymous bool   `json:"IsAnonymous"`
 }
 
+func init() {
+	opts := &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}
+
+	handler := slog.NewTextHandler(os.Stdout, opts)
+
+	log := slog.New(handler)
+
+	slog.SetDefault(log)
+}
+
 func checkIfCPFIsInUse(cpf string) (bool, error) {
 	conn, err := sql.Open(engine, connectionStr)
 	if err != nil {
@@ -165,8 +177,14 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 
 	var user User
 
-	// If the request is not empty, we need to validate the CPF and the Password
-	if request.CPF == "" || request.Password == "" {
+	if request.CPF == "" && request.Password == "" {
+		// If the request is empty, we need to create an anonymous user
+		user = User{
+			Id:          uuid.NewString(),
+			IsAnonymous: true,
+		}
+	} else {
+		// If the request is not empty, we need to validate the CPF and the Password
 		cpf := cpf.NewCPF(request.CPF)
 
 		slog.Debug("validating the cpf")
@@ -222,12 +240,6 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 			Password:    hashedPassword,
 			IsAnonymous: false,
 		}
-	} else {
-		// If the request is empty, we need to create an anonymous user
-		user = User{
-			Id:          uuid.NewString(),
-			IsAnonymous: true,
-		}
 	}
 
 	slog.Debug("persisting the user")
@@ -259,8 +271,6 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	slog.Info("received a request", "path", req.Path, "method", req.HTTPMethod)
-
-	slog.Info("headers", "headers", req.Headers)
 
 	if req.Path == "/users" && req.HTTPMethod == "POST" {
 		return handleCreateUser(req)
