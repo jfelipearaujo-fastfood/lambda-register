@@ -108,7 +108,7 @@ func persistUser(user User) error {
 
 	if user.IsAnonymous {
 		slog.Debug("inserting an anonymous user")
-		res, err = conn.Exec("INSERT INTO clients (Id, DocumentType, IsAnonymous) VALUES ($1, $2, $3);",
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous") VALUES ($1, $2, $3);`,
 			user.Id,
 			"CPF",
 			false)
@@ -119,7 +119,7 @@ func persistUser(user User) error {
 		}
 	} else {
 		slog.Debug("inserting an user")
-		res, err = conn.Exec("INSERT INTO clients (Id, DocumentId, DocumentType, IsAnonymous, Password) VALUES ($1, $2, $3, $4, $5);",
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentId", "DocumentType", "IsAnonymous", "Password") VALUES ($1, $2, $3, $4, $5);`,
 			user.Id,
 			user.DocumentId,
 			"CPF",
@@ -205,7 +205,6 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 			}, nil
 		}
 
-		slog.Debug("checking if the cpf is in use")
 		cpfInUse, err := checkIfCPFIsInUse(request.CPF)
 		if err != nil {
 			slog.Error("error while trying to check if the cpf is in use", "error", err)
@@ -242,7 +241,6 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 		}
 	}
 
-	slog.Debug("persisting the user")
 	if err := persistUser(user); err != nil {
 		slog.Error("error while trying to persist the user", "error", err)
 		return events.APIGatewayProxyResponse{
