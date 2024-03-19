@@ -74,7 +74,7 @@ func checkIfCPFIsInUse(cpf string) (bool, error) {
 		return false, err
 	}
 
-	statement, err := conn.Query("SELECT COUNT(*) As count FROM clients WHERE DocumentId = $1", cpf)
+	statement, err := conn.Query(`SELECT COUNT(c.*) As count FROM clients c WHERE c."DocumentId" = $1`, cpf)
 	if err != nil {
 		slog.Error("error while trying to execute the query to check if CPF is in use", "error", err)
 		return false, err
