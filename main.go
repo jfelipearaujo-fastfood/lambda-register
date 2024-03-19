@@ -280,7 +280,7 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	slog.Info("received a request", "path", req.Path, "method", req.HTTPMethod)
 
-	if req.Path == "/users" && req.HTTPMethod == "POST" {
+	if req.Path == "/register" && req.HTTPMethod == "POST" {
 		return handleCreateUser(req)
 	}
 
