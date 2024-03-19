@@ -108,7 +108,7 @@ func persistUser(user User) error {
 
 	if user.IsAnonymous {
 		slog.Debug("inserting an anonymous user")
-		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous", "CreatedAtUtc") VALUES ($1, $2, $3, $4);`,
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous", "CreatedAtUtc", "UpdatedAtUtc") VALUES ($1, $2, $3, $4, $4);`,
 			user.Id,
 			1,
 			false,
@@ -120,7 +120,7 @@ func persistUser(user User) error {
 		}
 	} else {
 		slog.Debug("inserting an user")
-		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentId", "DocumentType", "IsAnonymous", "Password", "CreatedAtUtc") VALUES ($1, $2, $3, $4, $5, $6);`,
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentId", "DocumentType", "IsAnonymous", "Password", "CreatedAtUtc", "UpdatedAtUtc") VALUES ($1, $2, $3, $4, $5, $6, $6);`,
 			user.Id,
 			user.DocumentId,
 			1,
