@@ -108,10 +108,11 @@ func persistUser(user User) error {
 
 	if user.IsAnonymous {
 		slog.Debug("inserting an anonymous user")
-		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous", "CreatedAtUtc") VALUES ($1, $2, $3, CURRENT_TIMESTAMP());`,
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous", "CreatedAtUtc") VALUES ($1, $2, $3, $4);`,
 			user.Id,
 			1,
-			false)
+			false,
+			time.Now().UTC())
 
 		if err != nil {
 			slog.Error("error while trying to execute the query to insert an anonymous user", "error", err)
@@ -119,12 +120,13 @@ func persistUser(user User) error {
 		}
 	} else {
 		slog.Debug("inserting an user")
-		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentId", "DocumentType", "IsAnonymous", "Password", "CreatedAtUtc") VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP());`,
+		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentId", "DocumentType", "IsAnonymous", "Password", "CreatedAtUtc") VALUES ($1, $2, $3, $4, $5, $6);`,
 			user.Id,
 			user.DocumentId,
 			1,
 			false,
-			user.Password)
+			user.Password,
+			time.Now().UTC())
 
 		if err != nil {
 			slog.Error("error while trying to execute the query to insert an user", "error", err)
@@ -144,7 +146,7 @@ func persistUser(user User) error {
 }
 
 func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes), err
 }
 
