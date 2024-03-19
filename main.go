@@ -138,7 +138,7 @@ func persistUser(user User) error {
 		res, err = conn.Exec(`INSERT INTO clients ("Id", "DocumentType", "IsAnonymous", "CreatedAtUtc", "UpdatedAtUtc") VALUES ($1, $2, $3, $4, $4);`,
 			user.Id,
 			1,
-			false,
+			true,
 			time.Now().UTC())
 
 		if err != nil {
@@ -272,7 +272,7 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 		return buildResponse(http.StatusInternalServerError, "internal server error", ""), nil
 	}
 
-	slog.Debug("completed", "token", token)
+	slog.Debug("token generated")
 
 	return buildResponse(http.StatusCreated, "success", token), nil
 }
