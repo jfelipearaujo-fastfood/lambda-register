@@ -163,6 +163,14 @@ func maskCpf(cpf string) string {
 	return strings.ReplaceAll(cpf, cpf[3:(len(cpf)-2)], strings.Repeat("*", len(cpf)-5))
 }
 
+func clearSpecialChars(cpf string) string {
+	charsToRemove := []string{"/", ".", "-", " "}
+	for _, char := range charsToRemove {
+		cpf = strings.ReplaceAll(cpf, char, "")
+	}
+	return cpf
+}
+
 func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var request Request
 
@@ -187,7 +195,7 @@ func handleCreateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 		}
 	} else {
 		// If the request is not empty, we need to validate the CPF and the Password
-		cpf := cpf.NewCPF(request.CPF)
+		cpf := cpf.NewCPF(clearSpecialChars(request.CPF))
 
 		slog.Debug("validating the cpf")
 		if !cpf.IsValid() {
