@@ -1,5 +1,7 @@
 # Fast-Food Lambda Register
 
+This project its responsible for creating a lambda function that will registar a new User in the database. The user can be a anonymous user or a user with a CPF and password.
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements
@@ -18,7 +20,7 @@ No providers.
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The IDs of the private subnets | `list(string)` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The default region to use for AWS | `string` | `"us-east-1"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | The default tags to use for AWS resources | `map(string)` | <pre>{<br>  "App": "lambda-register"<br>}</pre> | no |
-| <a name="input_vpc_cidr_block"></a> [vpc\_cidr\_block](#input\_vpc\_cidr\_block) | The CIDR block of the VPC | `string` | n/a | yes |
+| <a name="input_vpc_cidr_block"></a> [vpc\_cidr\_block](#input\_vpc\_cidr\_block) | The CIDR block of the VPC | `string` | `"10.0.0.0/16"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC | `string` | n/a | yes |
 ## Modules
 
