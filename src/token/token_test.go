@@ -30,7 +30,8 @@ func TestCreateJwtToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CreateJwtToken(tt.args.user)
+			token := NewToken()
+			got, err := token.CreateJwtToken(tt.args.user)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateJwtToken() error = %v, wantErr %v", err, tt.wantErr)
 				return

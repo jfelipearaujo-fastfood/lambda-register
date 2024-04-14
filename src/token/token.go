@@ -12,7 +12,14 @@ var (
 	signingKey = []byte(os.Getenv("SIGN_KEY"))
 )
 
-func CreateJwtToken(user entities.User) (string, error) {
+type Token struct {
+}
+
+func NewToken() Token {
+	return Token{}
+}
+
+func (t Token) CreateJwtToken(user entities.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.Id,
 		"exp": time.Now().Add(time.Hour * 2).Unix(),

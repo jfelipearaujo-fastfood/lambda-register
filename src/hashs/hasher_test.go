@@ -1,6 +1,8 @@
 package hashs
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestHashPassword(t *testing.T) {
 	type args struct {
@@ -23,7 +25,8 @@ func TestHashPassword(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := HashPassword(tt.args.password)
+			hasher := NewHasher()
+			got, err := hasher.HashPassword(tt.args.password)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("HashPassword() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -7,6 +7,7 @@ import (
 
 	"github.com/jsfelipearaujo/lambda-register/src/entities"
 	"github.com/jsfelipearaujo/lambda-register/src/providers/interfaces"
+	_ "github.com/lib/pq"
 )
 
 const (
