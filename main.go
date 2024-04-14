@@ -13,7 +13,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/jsfelipearaujo/fast-food-lambda-register/src/cpf"
+	"github.com/jsfelipearaujo/lambda-register/src/cpf"
 	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 

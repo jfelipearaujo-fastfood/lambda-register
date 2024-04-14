@@ -23,9 +23,10 @@ func sumDigit(s string, table []int) int {
 	return sum
 }
 
-func Clean(s string) string {
-	s = strings.ReplaceAll(s, ".", "")
-	s = strings.ReplaceAll(s, "-", "")
-	s = strings.ReplaceAll(s, "/", "")
-	return s
+func Clean(cpf string) string {
+	charsToRemove := []string{"/", ".", "-", " "}
+	for _, char := range charsToRemove {
+		cpf = strings.ReplaceAll(cpf, char, "")
+	}
+	return cpf
 }
