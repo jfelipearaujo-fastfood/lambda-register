@@ -1,9 +1,8 @@
 package cpf
 
 import (
-	"fmt"
 	"regexp"
-	"strconv"
+	"strings"
 )
 
 var (
@@ -28,44 +27,20 @@ func (c *CPF) IsValid() bool {
 func (c *CPF) String() string {
 	str := string(*c)
 
-	if !c.IsValid() {
+	expr, err := regexp.Compile(CPFFormatPattern)
+	if err != nil {
 		return str
 	}
 
-	expr, err := regexp.Compile(CPFFormatPattern)
-	if err != nil {
+	if !c.IsValid() {
 		return str
 	}
 
 	return expr.ReplaceAllString(str, "$1.$2.$3-$4")
 }
 
-func ValidateCPF(cpf string) bool {
-	if len(cpf) != 11 {
-		return false
-	}
+func (c *CPF) Mask() string {
+	cpf := string(*c)
 
-	firstPart := cpf[0:9]
-	sum := sumDigit(firstPart, cpfFirstDigitTable)
-
-	r1 := sum % 11
-	d1 := 0
-
-	if r1 >= 2 {
-		d1 = 11 - r1
-	}
-
-	secondPart := firstPart + strconv.Itoa(d1)
-
-	dsum := sumDigit(secondPart, cpfSecondDigitTable)
-
-	r2 := dsum % 11
-	d2 := 0
-
-	if r2 >= 2 {
-		d2 = 11 - r2
-	}
-
-	finalPart := fmt.Sprintf("%s%d%d", firstPart, d1, d2)
-	return finalPart == cpf
+	return strings.ReplaceAll(cpf, cpf[3:(len(cpf)-2)], strings.Repeat("*", len(cpf)-5))
 }
