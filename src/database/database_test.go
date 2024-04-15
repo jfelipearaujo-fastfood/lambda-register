@@ -7,6 +7,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jsfelipearaujo/lambda-register/src/entities"
 	"github.com/jsfelipearaujo/lambda-register/src/providers/interfaces/mocks"
+	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -168,4 +169,32 @@ func TestDatabase_PersistUser_Anonymous(t *testing.T) {
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %s", err)
 	}
+}
+
+func TestNewDatabase(t *testing.T) {
+	// Arrange
+	db, _, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+
+	timeProviderMock := mocks.NewMockTimeProvider(t)
+
+	// Act
+	database := NewDatabase(db, timeProviderMock)
+
+	// Assert
+	assert.NotNil(t, database)
+}
+
+func TestNewDatabaseFromConnStr(t *testing.T) {
+	// Arrange
+	timeProviderMock := mocks.NewMockTimeProvider(t)
+
+	// Act
+	database := NewDatabaseFromConnStr(timeProviderMock)
+
+	// Assert
+	assert.NotNil(t, database)
 }
