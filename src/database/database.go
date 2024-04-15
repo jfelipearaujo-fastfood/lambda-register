@@ -49,7 +49,7 @@ func NewDatabaseFromConnStr(timeProvider interfaces.TimeProvider) *Database {
 }
 
 func (db *Database) CheckIfCPFIsInUse(cpf string) (bool, error) {
-	statement, err := db.conn.Query("SELECT COUNT(c.id) As count FROM customers c WHERE c.document_id = ?", cpf)
+	statement, err := db.conn.Query("SELECT COUNT(c.id) As count FROM customers c WHERE c.document_id = $1;", cpf)
 	if err != nil {
 		return false, err
 	}
@@ -66,7 +66,7 @@ func (db *Database) CheckIfCPFIsInUse(cpf string) (bool, error) {
 
 func (db *Database) PersistUser(user entities.User) error {
 	if user.IsAnonymous {
-		_, err := db.conn.Exec("INSERT INTO customers (id, document_type, is_anonymous, created_at, updated_at) VALUES (?, ?, ?, ?, ?);",
+		_, err := db.conn.Exec("INSERT INTO customers (id, document_type, is_anonymous, created_at, updated_at) VALUES ($1, $2, $3, $4, $5);",
 			user.Id,
 			DOCUMENT_TYPE_CPF,
 			true,
@@ -77,7 +77,7 @@ func (db *Database) PersistUser(user entities.User) error {
 			return err
 		}
 	} else {
-		_, err := db.conn.Exec("INSERT INTO customers (id, document_id, document_type, is_anonymous, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);",
+		_, err := db.conn.Exec("INSERT INTO customers (id, document_id, document_type, is_anonymous, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7);",
 			user.Id,
 			user.DocumentId,
 			DOCUMENT_TYPE_CPF,

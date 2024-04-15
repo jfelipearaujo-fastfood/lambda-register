@@ -33,7 +33,7 @@ func NewHandler(
 func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var request entities.Request
 	if err := json.Unmarshal([]byte(req.Body), &request); err != nil {
-		return router.InvalidRequestBody(), nil
+		return router.InvalidRequestBody(), err
 	}
 
 	var user entities.User
@@ -53,7 +53,7 @@ func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGateway
 
 		cpfInUse, err := h.db.CheckIfCPFIsInUse(cpf.String())
 		if err != nil {
-			return router.InternalServerError(), nil
+			return router.InternalServerError(), err
 		}
 
 		if cpfInUse {
@@ -62,19 +62,19 @@ func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGateway
 
 		hashedPassword, err := h.hasher.HashPassword(request.Password)
 		if err != nil {
-			return router.InternalServerError(), nil
+			return router.InternalServerError(), err
 		}
 
 		user = entities.NewUser(cpf.String(), hashedPassword)
 	}
 
 	if err := h.db.PersistUser(user); err != nil {
-		return router.InternalServerError(), nil
+		return router.InternalServerError(), err
 	}
 
 	token, err := h.jwt.CreateJwtToken(user)
 	if err != nil {
-		return router.InternalServerError(), nil
+		return router.InternalServerError(), err
 	}
 
 	return router.Success(token), nil

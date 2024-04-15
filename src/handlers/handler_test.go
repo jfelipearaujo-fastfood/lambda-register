@@ -242,7 +242,7 @@ func TestHandler_CrateUser(t *testing.T) {
 		got, err := h.CrateUser(req)
 
 		// Assert
-		assert.NoError(t, err)
+		assert.Error(t, err)
 		assert.Equal(t, http.StatusInternalServerError, got.StatusCode)
 
 		db_mock.AssertExpectations(t)
@@ -278,7 +278,7 @@ func TestHandler_CrateUser(t *testing.T) {
 		got, err := h.CrateUser(req)
 
 		// Assert
-		assert.NoError(t, err)
+		assert.Error(t, err)
 		assert.Equal(t, http.StatusInternalServerError, got.StatusCode)
 
 		db_mock.AssertExpectations(t)
@@ -318,7 +318,7 @@ func TestHandler_CrateUser(t *testing.T) {
 		got, err := h.CrateUser(req)
 
 		// Assert
-		assert.NoError(t, err)
+		assert.Error(t, err)
 		assert.Equal(t, http.StatusInternalServerError, got.StatusCode)
 
 		db_mock.AssertExpectations(t)
@@ -362,7 +362,7 @@ func TestHandler_CrateUser(t *testing.T) {
 		got, err := h.CrateUser(req)
 
 		// Assert
-		assert.NoError(t, err)
+		assert.Error(t, err)
 		assert.Equal(t, http.StatusInternalServerError, got.StatusCode)
 
 		db_mock.AssertExpectations(t)
