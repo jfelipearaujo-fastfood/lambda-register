@@ -137,7 +137,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
 		postgresContainer, err := postgres.RunContainer(ctx,
 			testcontainers.WithImage("postgres:16"),
-			postgres.WithInitScripts(filepath.Join("testdata", "init-db.sh")),
+			postgres.WithInitScripts(filepath.Join("testdata", "init-db.sql")),
 			postgres.WithDatabase("lambda"),
 			postgres.WithUsername("lambda"),
 			postgres.WithPassword("123456"),
