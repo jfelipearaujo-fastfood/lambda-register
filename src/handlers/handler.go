@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/jsfelipearaujo/lambda-register/src/cpf"
-	db_interface "github.com/jsfelipearaujo/lambda-register/src/database/interfaces"
-	"github.com/jsfelipearaujo/lambda-register/src/entities"
-	hash_interface "github.com/jsfelipearaujo/lambda-register/src/hashs/interfaces"
-	"github.com/jsfelipearaujo/lambda-register/src/router"
-	token_interface "github.com/jsfelipearaujo/lambda-register/src/token/interfaces"
+	"github.com/jfelipearaujo-org/lambda-register/src/cpf"
+	db_interface "github.com/jfelipearaujo-org/lambda-register/src/database/interfaces"
+	"github.com/jfelipearaujo-org/lambda-register/src/entities"
+	hash_interface "github.com/jfelipearaujo-org/lambda-register/src/hashs/interfaces"
+	"github.com/jfelipearaujo-org/lambda-register/src/router"
+	token_interface "github.com/jfelipearaujo-org/lambda-register/src/token/interfaces"
 )
 
 type Handler struct {

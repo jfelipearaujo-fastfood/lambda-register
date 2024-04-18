@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jsfelipearaujo/lambda-register/src/entities"
-	"github.com/jsfelipearaujo/lambda-register/src/providers/interfaces"
+	"github.com/jfelipearaujo-org/lambda-register/src/entities"
+	"github.com/jfelipearaujo-org/lambda-register/src/providers/interfaces"
 	_ "github.com/lib/pq"
 )
 

@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	"github.com/jsfelipearaujo/lambda-register/src/entities"
+	"github.com/jfelipearaujo-org/lambda-register/src/entities"
 )
 
 type Token interface {

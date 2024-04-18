@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jsfelipearaujo/lambda-register/src/providers/interfaces"
+	"github.com/jfelipearaujo-org/lambda-register/src/providers/interfaces"
 	"github.com/stretchr/testify/assert"
 )
 
