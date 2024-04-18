@@ -1,4 +1,4 @@
-module github.com/jsfelipearaujo/lambda-register
+module github.com/jfelipearaujo-org/lambda-register
 
 go 1.21.3
 

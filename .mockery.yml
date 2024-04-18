@@ -1,34 +1,34 @@
 with-expecter: false
 packages:
-    github.com/jsfelipearaujo/lambda-register/src/providers/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/src/providers/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
           dir: "./src/providers/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Provider)"
-    github.com/jsfelipearaujo/lambda-register/src/database/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/src/database/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
           dir: "./src/database/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Database)"
-    github.com/jsfelipearaujo/lambda-register/src/hashs/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/src/hashs/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
           dir: "./src/hashs/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Hasher)"
-    github.com/jsfelipearaujo/lambda-register/src/token/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/src/token/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
           dir: "./src/token/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Token)"
-    github.com/jsfelipearaujo/lambda-register/src/handlers/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/src/handlers/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
           dir: "./src/handlers/interfaces/mocks"
