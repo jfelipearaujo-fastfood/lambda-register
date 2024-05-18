@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/jfelipearaujo-org/lambda-register/src/entities"
-	"github.com/jfelipearaujo-org/lambda-register/src/providers/interfaces/mocks"
+	"github.com/jfelipearaujo-org/lambda-register/internal/entities"
+	"github.com/jfelipearaujo-org/lambda-register/internal/providers/interfaces/mocks"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 )

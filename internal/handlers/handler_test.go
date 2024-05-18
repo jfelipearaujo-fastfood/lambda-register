@@ -6,12 +6,12 @@ import (
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
-	db_interface "github.com/jfelipearaujo-org/lambda-register/src/database/interfaces"
-	db_interface_mock "github.com/jfelipearaujo-org/lambda-register/src/database/interfaces/mocks"
-	hash_interface "github.com/jfelipearaujo-org/lambda-register/src/hashs/interfaces"
-	hash_interface_mock "github.com/jfelipearaujo-org/lambda-register/src/hashs/interfaces/mocks"
-	token_interface "github.com/jfelipearaujo-org/lambda-register/src/token/interfaces"
-	token_interface_mock "github.com/jfelipearaujo-org/lambda-register/src/token/interfaces/mocks"
+	db_interface "github.com/jfelipearaujo-org/lambda-register/internal/database/interfaces"
+	db_interface_mock "github.com/jfelipearaujo-org/lambda-register/internal/database/interfaces/mocks"
+	hash_interface "github.com/jfelipearaujo-org/lambda-register/internal/hashs/interfaces"
+	hash_interface_mock "github.com/jfelipearaujo-org/lambda-register/internal/hashs/interfaces/mocks"
+	token_interface "github.com/jfelipearaujo-org/lambda-register/internal/token/interfaces"
+	token_interface_mock "github.com/jfelipearaujo-org/lambda-register/internal/token/interfaces/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

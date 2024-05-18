@@ -6,12 +6,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/jfelipearaujo-org/lambda-register/src/database"
-	"github.com/jfelipearaujo-org/lambda-register/src/handlers"
-	"github.com/jfelipearaujo-org/lambda-register/src/hashs"
-	"github.com/jfelipearaujo-org/lambda-register/src/providers"
-	"github.com/jfelipearaujo-org/lambda-register/src/router"
-	"github.com/jfelipearaujo-org/lambda-register/src/token"
+	"github.com/jfelipearaujo-org/lambda-register/internal/database"
+	"github.com/jfelipearaujo-org/lambda-register/internal/handlers"
+	"github.com/jfelipearaujo-org/lambda-register/internal/hashs"
+	"github.com/jfelipearaujo-org/lambda-register/internal/providers"
+	"github.com/jfelipearaujo-org/lambda-register/internal/router"
+	"github.com/jfelipearaujo-org/lambda-register/internal/token"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
