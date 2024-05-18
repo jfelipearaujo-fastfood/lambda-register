@@ -1,9 +1,9 @@
-data "aws_secretsmanager_secret" "master_user_secret" {
-  name = "db-${var.db_name}-secret"
+data "aws_secretsmanager_secret" "db_url" {
+  name = "db-customers-url-secret"
 }
 
-data "aws_secretsmanager_secret_version" "master_user_secret_version" {
-  secret_id = data.aws_secretsmanager_secret.master_user_secret.arn
+data "aws_secretsmanager_secret_version" "db_url_val" {
+  secret_id = data.aws_secretsmanager_secret.db_url.id
 }
 
 resource "aws_lambda_function" "lambda_function" {
@@ -20,11 +20,8 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = {
       SIGN_KEY = var.sign_key
-      DB_HOST  = jsondecode(data.aws_secretsmanager_secret_version.master_user_secret_version.secret_string)["host"]
-      DB_PORT  = var.db_port
-      DB_NAME  = var.db_name
-      DB_USER  = var.db_username
-      DB_PASS  = jsondecode(data.aws_secretsmanager_secret_version.master_user_secret_version.secret_string)["password"]
+      DB_NAME  = "customers"
+      DB_URL   = data.aws_secretsmanager_secret_version.db_url_val.secret_string
     }
   }
 
@@ -32,7 +29,7 @@ resource "aws_lambda_function" "lambda_function" {
 
   vpc_config {
     ipv6_allowed_for_dual_stack = false
-    subnet_ids                  = var.private_subnets
-    security_group_ids          = [var.security_group_id]
+    subnet_ids                  = data.aws_subnets.private_subnets.ids
+    security_group_ids          = data.aws_security_groups.dbs_security_groups.ids
   }
 }

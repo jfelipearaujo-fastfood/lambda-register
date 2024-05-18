@@ -1,37 +1,37 @@
 with-expecter: false
 packages:
-    github.com/jfelipearaujo-org/lambda-register/src/providers/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/internal/providers/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
-          dir: "./src/providers/interfaces/mocks"
+          dir: "./internal/providers/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Provider)"
-    github.com/jfelipearaujo-org/lambda-register/src/database/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/internal/database/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
-          dir: "./src/database/interfaces/mocks"
+          dir: "./internal/database/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Database)"
-    github.com/jfelipearaujo-org/lambda-register/src/hashs/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/internal/hashs/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
-          dir: "./src/hashs/interfaces/mocks"
+          dir: "./internal/hashs/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Hasher)"
-    github.com/jfelipearaujo-org/lambda-register/src/token/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/internal/token/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
-          dir: "./src/token/interfaces/mocks"
+          dir: "./internal/token/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Token)"
-    github.com/jfelipearaujo-org/lambda-register/src/handlers/interfaces:
+    github.com/jfelipearaujo-org/lambda-register/internal/handlers/interfaces:
         config:
           filename: "{{ .InterfaceName | snakecase }}_mock.go"
-          dir: "./src/handlers/interfaces/mocks"
+          dir: "./internal/handlers/interfaces/mocks"
           mockname: "Mock{{.InterfaceName}}"
           outpkg: "mocks"
           include-regex: "(Handler)"

@@ -1,4 +1,4 @@
-# Fast-Food Lambda Register
+# Lambda Register
 
 This project its responsible for creating a lambda function that will registar a new User in the database. The user can be a anonymous user or a user with a CPF and password.
 
