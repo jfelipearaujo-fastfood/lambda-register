@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 
 	"github.com/jfelipearaujo-org/lambda-register/internal/entities"
@@ -14,14 +13,6 @@ const (
 	engine = "postgres"
 
 	DOCUMENT_TYPE_CPF = 1
-)
-
-var (
-	dbHost = os.Getenv("DB_HOST")
-	dbPort = os.Getenv("DB_PORT")
-	dbName = os.Getenv("DB_NAME")
-	dbUser = os.Getenv("DB_USER")
-	dbPass = os.Getenv("DB_PASS")
 )
 
 type Database struct {
@@ -37,7 +28,7 @@ func NewDatabase(db *sql.DB, timeProvider interfaces.TimeProvider) *Database {
 }
 
 func NewDatabaseFromConnStr(timeProvider interfaces.TimeProvider) *Database {
-	db, err := sql.Open(engine, fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPass, dbName))
+	db, err := sql.Open(engine, os.Getenv("DB_URL"))
 	if err != nil {
 		panic(err)
 	}

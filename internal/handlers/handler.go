@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log/slog"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/jfelipearaujo-org/lambda-register/internal/cpf"
@@ -53,6 +54,7 @@ func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGateway
 
 		cpfInUse, err := h.db.CheckIfCPFIsInUse(cpf.String())
 		if err != nil {
+			slog.Error("error checking if cpf is in use", "error", err)
 			return router.InternalServerError(), nil
 		}
 
@@ -62,6 +64,7 @@ func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGateway
 
 		hashedPassword, err := h.hasher.HashPassword(request.Password)
 		if err != nil {
+			slog.Error("error hashing password", "error", err)
 			return router.InternalServerError(), nil
 		}
 
@@ -69,11 +72,13 @@ func (h Handler) CrateUser(req events.APIGatewayProxyRequest) (events.APIGateway
 	}
 
 	if err := h.db.PersistUser(user); err != nil {
+		slog.Error("error persisting user", "error", err)
 		return router.InternalServerError(), nil
 	}
 
 	token, err := h.jwt.CreateJwtToken(user)
 	if err != nil {
+		slog.Error("error creating jwt token", "error", err)
 		return router.InternalServerError(), nil
 	}
 
